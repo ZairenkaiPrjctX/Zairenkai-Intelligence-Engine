@@ -1,0 +1,110 @@
+{
+  "schema": 1,
+  "note": "Byte copies from Zairenkai-Sdk at the pinned commit (SDK ADR 0001: the SDK is canonical for the Local-AI contracts). tools/check_sdk_copies.py compares them; never edit by hand. fixtures/replay/ are captured outputs of the real binaries that the spike's fixture executor replays: they are not live device data.",
+  "sdk": {
+    "repository": "ZairenkaiPrjctX/Zairenkai-Sdk",
+    "commit": "41481ec83c84afbdb5fe6986e77842b1c368c493"
+  },
+  "files": [
+    {
+      "sdk_path": "contracts/local-ai/action-preview.schema.json",
+      "copy": "contracts/sdk/local-ai/action-preview.schema.json",
+      "sha256": "ef4afbbb844bf8d5197184a8722e440a274ce4e712625443a40b53576551ebce"
+    },
+    {
+      "sdk_path": "contracts/local-ai/agent-audit-event.schema.json",
+      "copy": "contracts/sdk/local-ai/agent-audit-event.schema.json",
+      "sha256": "270bb661650003a8917f0ca63d86f23adecdfe72d8e1475766d0ea1504e9c0a9"
+    },
+    {
+      "sdk_path": "contracts/local-ai/device-capability-snapshot.schema.json",
+      "copy": "contracts/sdk/local-ai/device-capability-snapshot.schema.json",
+      "sha256": "d09d45d68c8be86ca838aaadd9a85a396a905e3ced18d3b24effe8088580ed34"
+    },
+    {
+      "sdk_path": "contracts/local-ai/execution-result.schema.json",
+      "copy": "contracts/sdk/local-ai/execution-result.schema.json",
+      "sha256": "c593c523cb91e30e4334c1b3275a7c8b3fead5ed6c8a561e3ae50800043d0989"
+    },
+    {
+      "sdk_path": "contracts/local-ai/intent-plan.schema.json",
+      "copy": "contracts/sdk/local-ai/intent-plan.schema.json",
+      "sha256": "9346e41e631798188ff41bd350fc64aa110b22ec84604ce88f0c843fca2ba143"
+    },
+    {
+      "sdk_path": "contracts/local-ai/model-manifest.schema.json",
+      "copy": "contracts/sdk/local-ai/model-manifest.schema.json",
+      "sha256": "b0e86a7a9fa921d14db430bd3dbd67e5df2240d544debbfca83c4c2ba1e99725"
+    },
+    {
+      "sdk_path": "contracts/local-ai/tool-definition.schema.json",
+      "copy": "contracts/sdk/local-ai/tool-definition.schema.json",
+      "sha256": "150e377b5363faea43d56067ebf288246c35b2b763d49ebed6ae9e4dd888b694"
+    },
+    {
+      "sdk_path": "contracts/local-ai/tool-invocation.schema.json",
+      "copy": "contracts/sdk/local-ai/tool-invocation.schema.json",
+      "sha256": "86929c28c8f8a28f0e6d5371a3a8fc970a31fee9bc640324a26ba55a1e350016"
+    },
+    {
+      "sdk_path": "contracts/local-ai/tool-registry.schema.json",
+      "copy": "contracts/sdk/local-ai/tool-registry.schema.json",
+      "sha256": "03cd37bd7ffcf61eacf73b9a3f2313c40d9167619f4034a772fa4d8bcafdfd56"
+    },
+    {
+      "sdk_path": "contracts/local-ai/user-approval.schema.json",
+      "copy": "contracts/sdk/local-ai/user-approval.schema.json",
+      "sha256": "5c2b776556b4750e98974b26f51c62f3e90582751f4f73bdb51dd5a1272d6c30"
+    },
+    {
+      "sdk_path": "contracts/core/envelope.schema.json",
+      "copy": "contracts/sdk/core/envelope.schema.json",
+      "sha256": "642d318598c89f07c6fd654ab57a444a70f1f1995d6405700134d35973cbd75e"
+    },
+    {
+      "sdk_path": "contracts/core/health.schema.json",
+      "copy": "contracts/sdk/core/health.schema.json",
+      "sha256": "0beab19526f2165584d172f0f2cf940a27d73092ccda109ddf9bd0474b6652cc"
+    },
+    {
+      "sdk_path": "contracts/core/capabilities.schema.json",
+      "copy": "contracts/sdk/core/capabilities.schema.json",
+      "sha256": "03ece5cc0ae03f13858fb6a52bcd703189faba1acf5e578c2762d3645ca87277"
+    },
+    {
+      "sdk_path": "contracts/fas/status.schema.json",
+      "copy": "contracts/sdk/fas/status.schema.json",
+      "sha256": "0e1f2145a877ac4a6286af71a8d859169df41008284126d2e2805d914bb328b4"
+    },
+    {
+      "sdk_path": "contracts/mirror/thermaltools/snapshot.schema.json",
+      "copy": "contracts/sdk/mirror/thermaltools/snapshot.schema.json",
+      "sha256": "5d343ba0607fb59022464599d4fab1d56b6d105f7706f9e6abe0f0ac393ce295"
+    },
+    {
+      "sdk_path": "contracts/mirror/thermaltools/capability.schema.json",
+      "copy": "contracts/sdk/mirror/thermaltools/capability.schema.json",
+      "sha256": "e5a67e92c701ae8a8c408e44b233e218e44bee612872cfe3beff3320708042ab"
+    },
+    {
+      "sdk_path": "fixtures/captured/app/core/health.json",
+      "copy": "fixtures/replay/core-health.json",
+      "sha256": "080f9041963ad37b421a61117e778986ffa7d1467783a5eb9af63ed7f49e6431"
+    },
+    {
+      "sdk_path": "fixtures/captured/app/core/capabilities.json",
+      "copy": "fixtures/replay/core-capabilities.json",
+      "sha256": "ead4a6c3c37749b0c0d729006175b31cbc11f12cf52936ff464da4a223639b6a"
+    },
+    {
+      "sdk_path": "fixtures/captured/app/fas/status.json",
+      "copy": "fixtures/replay/fas-status.json",
+      "sha256": "85442cccd9ce982b79b1ac07e17a3a00b611229d0703c0d10e5dc8580ae2caa7"
+    },
+    {
+      "sdk_path": "fixtures/captured/app/zthermal/snapshot-host.json",
+      "copy": "fixtures/replay/zthermal-snapshot-host.json",
+      "sha256": "8eb34367568917b390b08d9dc460842c471874c0f0babe284a32246fa6971a39"
+    }
+  ]
+}

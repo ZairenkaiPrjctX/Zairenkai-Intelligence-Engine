@@ -2,18 +2,33 @@
 
 > Owned by this repository. Document only what inspected code supports, citing file paths.
 
-## Status
+## Overview
 
-**Unknown.** No source code existed on 2026-10-18 (GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.). There is no architecture
-to describe yet, and nothing here should be read as a design decision.
+Phase A spike. One turn: utterance → `LocalModelRuntime` (llama.cpp, no network) with output
+constrained to `ToolRegistry.output_schema()` → parse and re-validate → `IntentPlan`
+(Zairenkai-Sdk schema) → read-only tools through a `ReadOnlyExecutor`, system tools into an
+`ActionPreview` → `ExecutionResult`s and `AgentAuditEvent`s (`zie/agent.py`).
 
-## When the first code lands, fill in
+## Components
 
-1. **Overview:** one paragraph on what the system does, from the code's entry points.
-2. **Components:** table of directory/module → responsibility → evidence path.
-3. **Entry points:** binaries, scripts, services, module init functions.
-4. **Data flow:** inputs, outputs, formats, persistence.
-5. **External interfaces:** APIs, device/kernel interfaces, network endpoints, files consumed
-   or produced for other Zairenkai repositories (reference them; do not restate their specs).
-6. **Trust boundaries:** privilege levels, network exposure, secret usage.
-7. **Generated artifacts:** what is generated, by which command, and must not be hand-edited.
+| Path | Responsibility |
+|---|---|
+| `zie/runtime.py` | `LocalModelRuntime`; `LlamaCppRuntime` (fixed argv, `unshare -n`, timeout, bounded output); `ScriptedRuntime` test double |
+| `zie/registry.py` | closed `ToolRegistry`, argument checks, generation schema |
+| `zie/agent.py` | the loop, prompt (template tokens stripped from user text), fail-closed rejections, preview, approval |
+| `zie/executor.py` | `FixtureReplayExecutor`: captured outputs, labelled as replay |
+| `zie/netguard.py` | blocks and records socket connects and lookups during a turn |
+| `zie/contracts.py` | SDK schemas resolved offline by `$id` |
+| `zie/__main__.py` | CLI; verifies the model's SHA-256 and size first |
+
+## Trust boundaries
+
+- Model output is untrusted: constrained, then validated against the SDK schemas and the
+  registry; failure means no action.
+- No root, no shell, no Core client in this repository. System actions need Core (Phase C).
+- The model process has no network interface; the Python process blocks sockets.
+
+## Generated or external artifacts
+
+Model files and llama.cpp builds are external (never committed). `contracts/sdk/` and
+`fixtures/replay/` are copies from Zairenkai-Sdk (`tools/check_sdk_copies.py`).

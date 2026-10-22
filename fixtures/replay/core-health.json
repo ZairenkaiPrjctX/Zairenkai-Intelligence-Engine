@@ -1,0 +1,21 @@
+{
+  "id": "cli-22310-3007747",
+  "ok": true,
+  "result": {
+    "audit_dropped": 0,
+    "context_age_ms": 204,
+    "core_api": "1.0.0",
+    "leases": 0,
+    "policy_version": "builtin-1/cfg-811a9b9369260358",
+    "protocol": 1,
+    "reasons": [
+      "fas.profile is Unsupported",
+      "fas.enabled is Unsupported",
+      "android.low_power_mode is Unknown"
+    ],
+    "state": "degraded",
+    "uptime_ms": 204,
+    "version": "0.1.0"
+  },
+  "v": 1
+}
