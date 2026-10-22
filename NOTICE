@@ -1,0 +1,10 @@
+Zairenkai-Intelligence-Engine
+Copyright 2026 ZairenkaiPrjctX contributors
+
+This product includes software developed by the ZairenkaiPrjctX project, licensed under the
+Apache License, Version 2.0 (see LICENSE).
+
+contracts/sdk/ and fixtures/replay/ are byte copies from Zairenkai-Sdk (same owner, Apache-2.0)
+at the commit in contracts/sources.json. No model weights and no llama.cpp code are included:
+the spike runs an external llama.cpp build (MIT) and a model file the developer downloads
+(docs/SPIKE_REPORT.md).

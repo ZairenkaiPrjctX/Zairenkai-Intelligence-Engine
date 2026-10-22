@@ -10,3 +10,11 @@
 *.p12
 *.jks
 *.keystore
+
+# Python
+__pycache__/
+.venv/
+# Never commit model files or runtime builds
+*.gguf
+*.litertlm
+sdk/

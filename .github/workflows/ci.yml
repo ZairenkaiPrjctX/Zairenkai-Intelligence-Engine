@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  spike:
+    name: agent loop tests (scripted model) and SDK copies
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the hash-locked validator (the runner's Python 3.12)
+        run: |
+          python3 -m venv .venv
+          .venv/bin/pip install --require-hashes -r requirements.lock
+      # No model is downloaded in CI: the real-model test skips and says so.
+      - name: Tests
+        run: .venv/bin/python -m unittest discover -s tests -t . -v
+      - name: Shell lint
+        run: shellcheck tools/*.sh
+      - name: Copies equal Zairenkai-Sdk at the pinned commit (public, fetched without credentials)
+        run: |
+          commit=$(python3 -c 'import json; print(json.load(open("contracts/sources.json"))["sdk"]["commit"])')
+          git init -q sdk
+          git -C sdk fetch -q --depth 1 https://github.com/ZairenkaiPrjctX/Zairenkai-Sdk.git "$commit"
+          .venv/bin/python tools/check_sdk_copies.py sdk

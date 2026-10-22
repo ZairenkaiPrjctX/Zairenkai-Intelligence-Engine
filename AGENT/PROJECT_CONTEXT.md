@@ -9,22 +9,28 @@
 |---|---|---|
 | Repository | `ZairenkaiPrjctX/Zairenkai-Intelligence-Engine` | Verified. Evidence: GitHub API |
 | GitHub description | AI Zairenkai | Verified. Evidence: GitHub API |
-| Visibility | private | Verified. Evidence: GitHub API |
-| Configured default branch | `main` (no commits exist on it yet) | Verified. Evidence: GitHub API |
-| Purpose | Model, orchestration, or inference functionality; confirm scope before documenting. | **Unverified**: rollout hint, not derived from code |
+| Visibility | public | Verified. Evidence: `list_repos`, 2026-10-22 |
+| Default branch | `dev` | Verified. Evidence: `git ls-remote`, 2026-10-22 |
+| Purpose | Zairenkai Local AI: on-device, offline intent planning over a closed typed tool registry; Core stays the authority | Verified. Evidence: maintainer brief 2026-10-22; `zie/`, `docs/adr/0001-local-runtime-spike.md` |
+| Licence | Apache-2.0 (`LICENSE`, `NOTICE`); not yet confirmed by the maintainer | **Unverified** (maintainer decision pending) |
 
 ## Contents
 
-**Unknown / Not Configured.** On 2026-10-18 the repository was empty. Evidence: GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.
-The only files present are the agent foundation itself.
+| Area | Location | Status |
+|---|---|---|
+| Phase A spike: agent loop, runtime adapter, registry, network guard | `zie/` | Verified on a Linux x86_64 host. Evidence: 14 tests, real-model test, offline proof, 2026-10-22. **Not run on Android** |
+| Tool registry (5 tools) | `registry/tools.json` | Verified against the SDK schema (`ToolRegistry.load`) |
+| Model manifest (Qwen2.5-0.5B-Instruct q4_0) | `models/` | Verified: SHA-256 and size match the downloaded file, 2026-10-22 |
+| Evaluation | `eval/` | Verified: 9/16 on the host, 2026-10-22 |
+| CI | `.github/workflows/ci.yml` | actionlint clean. **Unverified** on GitHub |
 
-## Key components
+## Key facts and limitations
 
-Unknown. Nothing to list until source code exists.
-
-## Build, test, and run
-
-Not Configured. No manifests, build scripts, or CI workflows exist.
+- Runtime for the spike: llama.cpp `b11500` (MIT), CPU. LiteRT-LM `v0.18.1` (Apache-2.0) was
+  audited, not built. Verified. Evidence: ADR 0001.
+- A 0.5B model routed 9 of 16 synthetic prompts correctly; not accurate enough alone. Verified.
+  Evidence: `docs/SPIKE_REPORT.md`.
+- No Core client: system actions stop at the preview. Verified. Evidence: `Agent.approve`, tests.
 
 ## Authoritative sources
 
@@ -37,9 +43,13 @@ Not Configured. No manifests, build scripts, or CI workflows exist.
 
 ## Related repositories
 
-None verified. Record relationships here, with evidence, once code shows them.
+- Zairenkai-Sdk: Local-AI and tool-output schemas, copied at `41481ec`. Verified. Evidence: `contracts/sources.json`.
+- Zairenkai-Core: the only executor of system actions (Phase C). **Unverified**: no client yet.
+- Zairenkai-App: future host of the chat UI and model manager. **Unverified**: not integrated.
 
-## Open questions to answer when code lands
+## Open questions
 
-- The description says 'AI Zairenkai': does this contain models, inference code, heuristics, or orchestration? Confirm before documenting scope.
-- Does it process user or device data, and where is that data sent or stored?
+- Which devices run the Phase B runtime comparison (one per SoC family if possible)?
+- Production language: Kotlin in the app process, or a native library behind JNI?
+- Which larger model (licence-cleared) is worth evaluating next?
+- Confirm Apache-2.0 for this repository (maintainer).

@@ -8,21 +8,37 @@ put detail in `AGENT/`.
 
 ## Current state (read first)
 
-As of 2026-10-18 this repository contained **no source code** (GitHub API 2026-10-18: repository size 0, no branches, no commits; ls-remote returned no refs.).
-Until that changes:
+This repository holds the **Zairenkai Local AI Phase A spike** (Python ≥ 3.11): a local model
+(llama.cpp, offline) maps a request to a typed `IntentPlan` against a closed `ToolRegistry`.
+Decision: `docs/adr/0001-local-runtime-spike.md`. Results: `docs/SPIKE_REPORT.md`. It is a
+feasibility harness, not the on-device product.
 
-- Do not describe an architecture, language, or toolchain as fact. Record discoveries in
-  `AGENT/PROJECT_CONTEXT.md` with evidence (file paths, manifests, command output).
-- When the first real code lands, update this file's **Commands** table and
-  `AGENT/ARCHITECTURE.md` in the same pull request.
+Non-negotiables in this repo:
+- **No remote AI API, ever.** Inference runs locally; the model process runs with no network
+  (`unshare -n`) and the agent blocks sockets during a turn. Model download is separate and
+  user-initiated; never upload prompts, telemetry or device identifiers.
+- **Structured tool calling only.** The registry is closed and typed; the model cannot add tools,
+  emit code, shell, paths or URLs. Invalid output yields no action.
+- **No privilege here.** System tools only produce an `ActionPreview`; execution belongs to
+  Zairenkai-Core after explicit approval. Never report an action applied without Core's verified
+  result.
+- Contracts come from Zairenkai-Sdk (`contracts/sdk/`, pinned); never edit the copies.
+- Never commit model files or runtime builds. Every model needs a `ModelManifest` with SHA-256 and
+  separate licences for weights, tokenizer and configuration.
+- Test doubles (`ScriptedRuntime`, fixture replay) are labelled; never present them as a real
+  model or a device.
 
 ## Commands
 
 | Purpose | Command | Status |
 |---|---|---|
-| Build | — | Not Configured |
-| Test | — | Not Configured |
-| Lint / format | — | Not Configured |
+| Set up | `python3 -m venv .venv && .venv/bin/pip install --require-hashes -r requirements.lock` | Verified. Evidence: 2026-10-22 |
+| Test | `.venv/bin/python -m unittest discover -s tests -t . -v` | Verified. Evidence: 14 passed, 1 skipped (real model not configured), 2026-10-22 |
+| Real-model test | `ZIE_LLAMA=<llama-completion> ZIE_MODEL=<gguf> .venv/bin/python -m unittest tests.test_real_model` | Verified. Evidence: passed, llama.cpp b11500, Qwen2.5-0.5B q4_0, Linux x86_64, 2026-10-22 |
+| Offline proof | `PYTHON=.venv/bin/python tools/offline-proof.sh <llama-completion> <gguf>` | Verified. Evidence: exit 0, no interface but lo, 0 network attempts, 2026-10-22 |
+| Evaluation | `.venv/bin/python tools/eval.py --llama <bin> --model <gguf>` | Verified. Evidence: 9/16 passed (`eval/results-2026-10-22-…json`) |
+| SDK copies | `.venv/bin/python tools/check_sdk_copies.py <Zairenkai-Sdk checkout>` | Verified. Evidence: all ok at SDK `41481ec`, 2026-10-22 |
+| Shell / workflow lint | `shellcheck tools/*.sh`; `actionlint .github/workflows/ci.yml` | Verified. Evidence: clean, 2026-10-22 |
 | Validate agent foundation | `python3 <path-to-.github>/agent-foundation/scripts/validate_agent_setup.py .` | Configured |
 
 Only list commands that exist in this repository. Never invent one.

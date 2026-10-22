@@ -1,0 +1,141 @@
+{
+  "id": "cli-22311-3007750",
+  "ok": true,
+  "result": [
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "Android API level unknown; battery saver control not assumed"
+      ],
+      "id": "android.low_power_mode",
+      "owner": "android_power",
+      "status": "unknown",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "service check failed: spawn failed: No such file or directory (os error 2)"
+      ],
+      "id": "android.power_hal",
+      "owner": "discovery",
+      "status": "unknown",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "zfasd not installed (module zairenkai has no bin/zfasd)"
+      ],
+      "id": "fas.enabled",
+      "owner": "fas",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "zfasd not installed (module zairenkai has no bin/zfasd)"
+      ],
+      "id": "fas.profile",
+      "owner": "fas",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "/sys/class/power_supply/battery/capacity"
+      ],
+      "id": "telemetry.battery_level",
+      "owner": "telemetry",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "/sys/class/power_supply/battery/temp"
+      ],
+      "id": "telemetry.battery_temp",
+      "owner": "telemetry",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "/sys/class/power_supply/battery/status"
+      ],
+      "id": "telemetry.charging",
+      "owner": "telemetry",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "/proc/meminfo"
+      ],
+      "id": "telemetry.mem_available",
+      "owner": "telemetry",
+      "status": "read_only",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "dumpsys thermalservice"
+      ],
+      "id": "telemetry.thermal_status",
+      "owner": "telemetry",
+      "status": "temporarily_unavailable",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "(not configured)",
+        "paths.thermaltools_binary is not configured"
+      ],
+      "id": "thermaltools.diagnostics",
+      "owner": "thermaltools",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "/data/adb/modules/zairenkai/bin/ztune",
+        "not installed: /data/adb/modules/zairenkai/bin/ztune: No such file or directory (os error 2)"
+      ],
+      "id": "tuning.gpu_governor",
+      "owner": "tuning",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "/data/adb/modules/zairenkai/bin/ztune",
+        "not installed: /data/adb/modules/zairenkai/bin/ztune: No such file or directory (os error 2)"
+      ],
+      "id": "tuning.io_scheduler",
+      "owner": "tuning",
+      "status": "unsupported",
+      "verified_on_device": false
+    },
+    {
+      "checked_at_ms": 3007543,
+      "evidence": [
+        "/data/adb/modules/zairenkai/bin/ztune",
+        "not installed: /data/adb/modules/zairenkai/bin/ztune: No such file or directory (os error 2)"
+      ],
+      "id": "tuning.telemetry",
+      "owner": "tuning",
+      "status": "unsupported",
+      "verified_on_device": false
+    }
+  ],
+  "v": 1
+}
