@@ -17,4 +17,4 @@ __pycache__/
 # Never commit model files or runtime builds
 *.gguf
 *.litertlm
-sdk/
+/sdk/

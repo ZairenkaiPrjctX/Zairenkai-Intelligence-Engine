@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/action-preview.schema.json",
+  "title": "ActionPreview",
+  "description": "What the user sees before anything changes: goal, observed facts with their source and age, proposed actions with risk, expected change and rollback, and what is unknown.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "plan_id",
+    "goal",
+    "facts",
+    "actions",
+    "unknowns",
+    "requires_confirmation"
+  ],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "goal": {
+      "type": "string"
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "source",
+          "observed_at_ms"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "observed_at_ms": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "invocation_id",
+          "tool_id",
+          "risk",
+          "expected_change",
+          "rollback"
+        ],
+        "properties": {
+          "invocation_id": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_-]{1,64}$"
+          },
+          "tool_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+            "maxLength": 64
+          },
+          "risk": {
+            "enum": [
+              "read_only",
+              "app_local",
+              "system",
+              "prohibited"
+            ]
+          },
+          "expected_change": {
+            "type": "string"
+          },
+          "rollback": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requires_confirmation": {
+      "type": "boolean"
+    }
+  }
+}

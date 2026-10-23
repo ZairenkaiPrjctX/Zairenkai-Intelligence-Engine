@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/core/envelope.schema.json",
+  "title": "Zairenkai-Core protocol v1 response envelope",
+  "description": "Every zcored response line. Defined from Zairenkai-Core crates/zcore-domain/src/protocol.rs (Response, ErrorBody, ErrorCode; PROTOCOL_VERSION = 1), the producer's canonical definition.",
+  "type": "object",
+  "required": [
+    "v",
+    "id",
+    "ok"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "id": {
+      "type": "string"
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "result": {},
+    "error": {
+      "$ref": "#/$defs/error"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "ok": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "result"
+        ],
+        "not": {
+          "required": [
+            "error"
+          ]
+        }
+      },
+      "else": {
+        "required": [
+          "error"
+        ],
+        "not": {
+          "required": [
+            "result"
+          ]
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "bad_request",
+            "unsupported_version",
+            "too_large",
+            "rate_limited",
+            "busy",
+            "permission_denied",
+            "not_found",
+            "timeout",
+            "shutting_down",
+            "internal"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

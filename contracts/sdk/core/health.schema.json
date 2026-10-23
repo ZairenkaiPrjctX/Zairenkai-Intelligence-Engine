@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/core/health.schema.json",
+  "title": "zcored health result",
+  "description": "`health` method. state is ready when no reason is listed (Core crates/zcored/src/engine.rs).",
+  "allOf": [
+    {
+      "$ref": "envelope.schema.json"
+    },
+    {
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "object",
+          "required": [
+            "state",
+            "version",
+            "core_api",
+            "protocol",
+            "policy_version",
+            "uptime_ms",
+            "reasons"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "ready",
+                "degraded"
+              ]
+            },
+            "version": {
+              "type": "string"
+            },
+            "core_api": {
+              "type": "string"
+            },
+            "protocol": {
+              "const": 1
+            },
+            "policy_version": {
+              "type": "string"
+            },
+            "uptime_ms": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "context_age_ms": {
+              "type": [
+                "integer",
+                "null"
+              ],
+              "minimum": 0
+            },
+            "leases": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "audit_dropped": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "reasons": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

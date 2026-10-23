@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/user-approval.schema.json",
+  "title": "UserApproval",
+  "description": "The user's answer to one ActionPreview. Only explicit UI input produces it; model text never does.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "plan_id",
+    "decision",
+    "invocation_ids",
+    "decided_at_ms",
+    "scope"
+  ],
+  "properties": {
+    "plan_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "decision": {
+      "enum": [
+        "approved",
+        "declined"
+      ]
+    },
+    "invocation_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9_-]{1,64}$"
+      }
+    },
+    "decided_at_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "scope": {
+      "const": "once"
+    }
+  }
+}

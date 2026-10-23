@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/fas/status.schema.json",
+  "title": "zfasd status",
+  "description": "`zfasd ctl status` and the state file (Zairenkai-FAS docs/INTEGRATION.md, status version 1). Only the fields consumers depend on are required; nested diagnostics may grow.",
+  "type": "object",
+  "required": [
+    "version",
+    "running",
+    "mode",
+    "observe_only",
+    "enabled",
+    "default_profile",
+    "profile",
+    "errors"
+  ],
+  "properties": {
+    "version": {
+      "const": 1
+    },
+    "pid": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "running": {
+      "type": "boolean"
+    },
+    "updated_mono_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "mode": {
+      "type": "string"
+    },
+    "observe_only": {
+      "type": "boolean"
+    },
+    "package": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "enabled": {
+      "type": "boolean"
+    },
+    "default_profile": {
+      "type": "string"
+    },
+    "app_enabled": {
+      "type": "boolean"
+    },
+    "profile": {
+      "type": "string"
+    },
+    "telemetry_error": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "step": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "domains": {
+      "type": "array"
+    },
+    "errors": {
+      "type": "array"
+    }
+  }
+}
