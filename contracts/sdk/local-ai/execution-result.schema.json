@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/execution-result.schema.json",
+  "title": "ExecutionResult",
+  "description": "The verified result of one invocation. `completed` is a read-only tool that returned data; `applied_verified` is a write that Core read back. Success is reported only from these two.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "invocation_id",
+    "tool_id",
+    "status"
+  ],
+  "properties": {
+    "invocation_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "tool_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "maxLength": 64
+    },
+    "status": {
+      "enum": [
+        "planned",
+        "awaiting_confirmation",
+        "rejected",
+        "unsupported",
+        "timed_out",
+        "failed",
+        "partial",
+        "completed",
+        "applied_verified",
+        "rolled_back"
+      ]
+    },
+    "core_request_id": {
+      "type": "string"
+    },
+    "output": {},
+    "error": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "rejected",
+              "unsupported",
+              "timed_out",
+              "failed"
+            ]
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "error"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "applied_verified"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "core_request_id"
+        ]
+      }
+    }
+  ]
+}

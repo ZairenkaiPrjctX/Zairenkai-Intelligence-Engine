@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/core/capabilities.schema.json",
+  "title": "zcored capabilities result",
+  "description": "`capabilities` method (Core crates/zcore-domain/src/capability.rs, CapabilityStatus snake_case).",
+  "allOf": [
+    {
+      "$ref": "envelope.schema.json"
+    },
+    {
+      "properties": {
+        "ok": {
+          "const": true
+        },
+        "result": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "status",
+              "owner",
+              "evidence",
+              "verified_on_device"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "read_write",
+                  "read_only",
+                  "permission_restricted",
+                  "unsupported",
+                  "temporarily_unavailable",
+                  "unknown"
+                ]
+              },
+              "owner": {
+                "type": "string",
+                "minLength": 1
+              },
+              "evidence": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "checked_at_ms": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "verified_on_device": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

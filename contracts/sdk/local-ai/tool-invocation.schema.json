@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/tool-invocation.schema.json",
+  "title": "ToolInvocation",
+  "description": "One call of a tool from the closed ToolRegistry, as proposed by the local model. Zairenkai Local AI contract (docs/adr/0001-canonical-contracts.md: defined in the SDK). Model output is untrusted: objects the model produces are closed (additionalProperties false) so an extra field fails validation instead of being ignored.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "invocation_id",
+    "tool_id",
+    "arguments"
+  ],
+  "properties": {
+    "invocation_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "tool_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "maxLength": 64
+    },
+    "arguments": {
+      "type": "object",
+      "maxProperties": 16
+    }
+  }
+}

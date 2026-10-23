@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/tool-definition.schema.json",
+  "title": "ToolDefinition",
+  "description": "One entry of the closed, typed ToolRegistry compiled into the Intelligence Engine. The model cannot add tools. A system tool names the typed Core operation it maps to; Core re-validates it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "description",
+    "risk",
+    "access",
+    "permission",
+    "reversible",
+    "timeout_ms",
+    "confirmation",
+    "parameters",
+    "output"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "maxLength": 64
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "risk": {
+      "enum": [
+        "read_only",
+        "app_local",
+        "system",
+        "prohibited"
+      ]
+    },
+    "access": {
+      "enum": [
+        "read",
+        "write"
+      ]
+    },
+    "permission": {
+      "enum": [
+        "none",
+        "android_permission",
+        "root_via_core"
+      ]
+    },
+    "reversible": {
+      "type": "boolean"
+    },
+    "timeout_ms": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 120000
+    },
+    "confirmation": {
+      "enum": [
+        "none",
+        "preview",
+        "explicit"
+      ]
+    },
+    "core_operation": {
+      "type": "string",
+      "description": "Core Operation `op` for system tools (Core crates/zcore-domain/src/request.rs)."
+    },
+    "parameters": {
+      "type": "object",
+      "description": "JSON Schema (draft 2020-12) of the arguments; must be a closed object."
+    },
+    "output": {
+      "type": "string",
+      "description": "$id of the schema the tool's output validates against."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "risk": {
+            "const": "read_only"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "access": {
+            "const": "read"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "risk": {
+            "const": "system"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "core_operation"
+        ],
+        "properties": {
+          "permission": {
+            "const": "root_via_core"
+          },
+          "confirmation": {
+            "const": "explicit"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "risk": {
+            "const": "prohibited"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "confirmation": {
+            "const": "explicit"
+          }
+        }
+      }
+    }
+  ]
+}

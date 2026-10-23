@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/device-capability-snapshot.schema.json",
+  "title": "DeviceCapabilitySnapshot",
+  "description": "Facts the planner may use for one turn, each with its source; unknown stays unknown. Built from existing clients (Core capabilities, zthermal, zart, Android APIs).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "captured_at_ms",
+    "facts",
+    "accelerators"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "captured_at_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+            "maxLength": 64
+          },
+          "status": {
+            "enum": [
+              "value",
+              "unavailable",
+              "permission_denied",
+              "unsupported",
+              "stale"
+            ]
+          },
+          "value": {},
+          "unit": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "accelerators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "backend",
+          "self_test"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "cpu",
+              "gpu",
+              "npu"
+            ]
+          },
+          "backend": {
+            "type": "string"
+          },
+          "self_test": {
+            "enum": [
+              "not_run",
+              "passed",
+              "failed"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/tool-registry.schema.json",
+  "title": "ToolRegistry",
+  "description": "The closed list of tools the Intelligence Engine exposes to the model. Tool ids are unique (checked by tools/zsdk.py tests).",
+  "type": "array",
+  "minItems": 1,
+  "items": {
+    "$ref": "tool-definition.schema.json"
+  }
+}

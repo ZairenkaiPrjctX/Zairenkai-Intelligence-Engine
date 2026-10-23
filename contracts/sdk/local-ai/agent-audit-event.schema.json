@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/agent-audit-event.schema.json",
+  "title": "AgentAuditEvent",
+  "description": "One local, append-only audit record of the agent loop. Never contains secrets, device identifiers or raw root output.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "seq",
+    "at_ms",
+    "kind",
+    "detail"
+  ],
+  "properties": {
+    "seq": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "at_ms": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "kind": {
+      "enum": [
+        "utterance_received",
+        "plan_parsed",
+        "plan_rejected",
+        "tool_invoked",
+        "preview_shown",
+        "approval_recorded",
+        "execution_result",
+        "model_loaded",
+        "model_unloaded",
+        "network_blocked"
+      ]
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "invocation_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "detail": {
+      "type": "string",
+      "maxLength": 500
+    }
+  }
+}

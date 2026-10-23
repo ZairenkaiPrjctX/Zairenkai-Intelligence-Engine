@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/model-manifest.schema.json",
+  "title": "ModelManifest",
+  "description": "Metadata of one allowlisted local model: immutable source revision, every file's SHA-256 and size, separate licences for weights, tokenizer and configuration, runtime format and resource expectations. Download is user-initiated; inference never needs the network.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "model_id",
+    "source",
+    "files",
+    "format",
+    "licenses",
+    "context_tokens",
+    "min_memory_bytes",
+    "abis",
+    "safety_evaluation"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "model_id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)*$",
+      "maxLength": 64
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "revision"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        }
+      }
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "sha256",
+          "size_bytes"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9._-]+$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "size_bytes": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    },
+    "format": {
+      "enum": [
+        "gguf",
+        "litertlm"
+      ]
+    },
+    "licenses": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "weights",
+        "tokenizer",
+        "config"
+      ],
+      "properties": {
+        "weights": {
+          "type": "string"
+        },
+        "tokenizer": {
+          "type": "string"
+        },
+        "config": {
+          "type": "string"
+        }
+      }
+    },
+    "context_tokens": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "min_memory_bytes": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "abis": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "enum": [
+          "arm64-v8a",
+          "armeabi-v7a",
+          "x86_64"
+        ]
+      }
+    },
+    "safety_evaluation": {
+      "enum": [
+        "not_evaluated",
+        "evaluated"
+      ]
+    }
+  }
+}

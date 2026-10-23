@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/local-ai/intent-plan.schema.json",
+  "title": "IntentPlan",
+  "description": "Structured output of the local model for one user turn: the goal it understood, its confidence, clarifying questions, and proposed tool invocations. It authorizes nothing. Zairenkai Local AI contract (docs/adr/0001-canonical-contracts.md: defined in the SDK). Model output is untrusted: objects the model produces are closed (additionalProperties false) so an extra field fails validation instead of being ignored.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "plan_id",
+    "language",
+    "goal",
+    "confidence",
+    "invocations",
+    "clarifications"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "plan_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,64}$"
+    },
+    "language": {
+      "enum": [
+        "id",
+        "en",
+        "other"
+      ]
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 280
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "clarifications": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "string",
+        "maxLength": 200
+      }
+    },
+    "invocations": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "$ref": "tool-invocation.schema.json"
+      }
+    }
+  }
+}
