@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "note": "The inference library the on-device runner (runtime/zie_run.cpp) links. Only the core libraries (llama, ggml) are built: no common, tools, server or HTTP code. Changing the pin is a reviewed edit (ADR 0002).",
+  "repository": "ggml-org/llama.cpp",
+  "url": "https://github.com/ggml-org/llama.cpp.git",
+  "tag": "b11500",
+  "commit": "097f5b5332f46559f1ee11d9d64e48a5065b2989",
+  "license": "MIT (LICENSE at the commit, \"The ggml authors\")"
+}
