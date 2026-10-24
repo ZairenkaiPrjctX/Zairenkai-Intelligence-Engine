@@ -30,10 +30,35 @@ jobs:
       - name: Tests
         run: .venv/bin/python -m unittest discover -s tests -t . -v
       - name: Shell lint
-        run: shellcheck tools/*.sh
+        run: shellcheck tools/*.sh scripts/*.sh
       - name: Copies equal Zairenkai-Sdk at the pinned commit (public, fetched without credentials)
         run: |
           commit=$(python3 -c 'import json; print(json.load(open("contracts/sources.json"))["sdk"]["commit"])')
           git init -q sdk
           git -C sdk fetch -q --depth 1 https://github.com/ZairenkaiPrjctX/Zairenkai-Sdk.git "$commit"
           .venv/bin/python tools/check_sdk_copies.py sdk
+
+  # The runner the Zairenkai app ships: zie-run against llama.cpp's core libraries at the pinned
+  # commit (public, fetched without credentials), for arm64-v8a and x86_64. The script fails on
+  # any networking import, an unexpected library dependency or a LOAD segment not 16 KB aligned.
+  android:
+    name: zie-run for Android (no network imports)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      NDK_VERSION: r27d
+      NDK_SHA256: 601246087a682d1944e1e16dd85bc6e49560fe8b6d61255be2829178c8ed15d9
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Android NDK (checksum verified) and Ninja
+        run: |
+          sudo apt-get install -y -q ninja-build
+          curl -fsSL -o /tmp/ndk.zip "https://dl.google.com/android/repository/android-ndk-${NDK_VERSION}-linux.zip"
+          echo "${NDK_SHA256}  /tmp/ndk.zip" | sha256sum -c -
+          unzip -q /tmp/ndk.zip -d /tmp
+          rm /tmp/ndk.zip
+          echo "ANDROID_NDK_HOME=/tmp/android-ndk-${NDK_VERSION}" >> "$GITHUB_ENV"
+      - run: scripts/build-android.sh
+      - run: cat dist/zairenkai-intelligence/component.json

@@ -67,6 +67,47 @@ class LlamaCppRuntime:
 
 
 @dataclass
+class ZieRunRuntime:
+    """runtime/zie_run.cpp, the runner the Android app ships: llama.cpp's core libraries only,
+    sampling under registry/output.gbnf (the grammar of [json_schema]; passed by file, prompt by
+    file, so neither lands in a process list). Also isolated with `unshare -n` here."""
+
+    binary: Path
+    model: Path
+    grammar: Path
+    threads: int = 4
+    context: int = 2048
+    timeout_s: float = 120.0
+    isolate_network: bool = True
+    name: str = field(default="zie-run (llama.cpp core)", init=False)
+
+    def generate(self, prompt: str, json_schema: dict[str, Any], max_tokens: int) -> str:
+        import tempfile
+
+        for f in (self.binary, self.model, self.grammar):
+            if not f.is_file():
+                raise RuntimeUnavailable(f"model runtime not installed ({f})")
+        with tempfile.NamedTemporaryFile("w", suffix=".txt", encoding="utf-8") as p:
+            p.write(prompt)
+            p.flush()
+            argv = [str(self.binary), "-m", str(self.model), "-g", str(self.grammar), "-f", p.name,
+                    "-n", str(max_tokens), "-c", str(self.context), "-t", str(self.threads)]
+            if self.isolate_network:
+                unshare = shutil.which("unshare")
+                if unshare is None:
+                    raise RuntimeUnavailable("unshare not found: refusing to run the model with network access")
+                argv = [unshare, "-n", "--"] + argv
+            try:
+                r = subprocess.run(argv, capture_output=True, timeout=self.timeout_s, env={"LC_ALL": "C"}, check=False)
+            except subprocess.TimeoutExpired as e:
+                raise RuntimeUnavailable(f"generation timed out after {self.timeout_s:.0f} s") from e
+        if r.returncode != 0:
+            tail = r.stderr.decode(errors="replace").strip().splitlines()[-1:] or ["no output"]
+            raise RuntimeUnavailable(f"zie-run exited {r.returncode}: {tail[0][:200]}")
+        return r.stdout[:MAX_OUTPUT_BYTES].decode(errors="replace").strip()
+
+
+@dataclass
 class ScriptedRuntime:
     """Test double: returns pre-written model outputs in order. Never used outside tests."""
 
