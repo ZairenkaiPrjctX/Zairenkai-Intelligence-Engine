@@ -24,7 +24,9 @@ Non-negotiables in this repo:
   result.
 - Contracts come from Zairenkai-Sdk (`contracts/sdk/`, pinned); never edit the copies.
 - Never commit model files or runtime builds. Every model needs a `ModelManifest` with SHA-256 and
-  separate licences for weights, tokenizer and configuration.
+  separate licences for weights, tokenizer and configuration. Models reach the app only through a
+  release `model-<model_id>` that the **Model release** workflow drafts from the manifest's pinned
+  source and a maintainer publishes (`docs/MODEL_RELEASE.md`); never replace a published model.
 - Test doubles (`ScriptedRuntime`, fixture replay) are labelled; never present them as a real
   model or a device.
 
@@ -33,12 +35,13 @@ Non-negotiables in this repo:
 | Purpose | Command | Status |
 |---|---|---|
 | Set up | `python3 -m venv .venv && .venv/bin/pip install --require-hashes -r requirements.lock` | Verified. Evidence: 2026-10-22 |
-| Test | `.venv/bin/python -m unittest discover -s tests -t . -v` | Verified. Evidence: 15 passed, 1 skipped (real model not configured), 2026-10-23 (a fresh clone failed before contracts/sdk/ was committed) |
+| Test | `.venv/bin/python -m unittest discover -s tests -t . -v` | Verified. Evidence: 19 passed, 1 skipped (real model not configured), 2026-10-24 |
 | Real-model test | `ZIE_LLAMA=<llama-completion> ZIE_MODEL=<gguf> .venv/bin/python -m unittest tests.test_real_model` | Verified. Evidence: passed, llama.cpp b11500, Qwen2.5-0.5B q4_0, Linux x86_64, 2026-10-22 |
 | Offline proof | `PYTHON=.venv/bin/python tools/offline-proof.sh <llama-completion> <gguf>` | Verified. Evidence: exit 0, no interface but lo, 0 network attempts, 2026-10-22 |
 | Evaluation | `.venv/bin/python tools/eval.py --llama <bin> --model <gguf>` | Verified. Evidence: 9/16 passed (`eval/results-2026-10-22-…json`) |
 | SDK copies | `.venv/bin/python tools/check_sdk_copies.py <Zairenkai-Sdk checkout>` | Verified. Evidence: all ok at SDK `41481ec`, 2026-10-22 |
-| Shell / workflow lint | `shellcheck tools/*.sh`; `actionlint .github/workflows/ci.yml` | Verified. Evidence: clean, 2026-10-22 |
+| Shell / workflow lint | `shellcheck tools/*.sh`; `actionlint .github/workflows/*.yml` | Verified. Evidence: clean, 2026-10-24 |
+| Model release (maintainer) | GitHub Actions **Model release** on `dev`, `draft_release` (`docs/MODEL_RELEASE.md`); locally `python3 tools/model_release.py urls\|stage …` | Verified locally. Evidence: `stage` accepted the real Qwen2.5-0.5B q4_0 file (SHA-256 `7671c0c3…`), 2026-10-24; the workflow has never run |
 | Validate agent foundation | `python3 <path-to-.github>/agent-foundation/scripts/validate_agent_setup.py .` | Configured |
 
 Only list commands that exist in this repository. Never invent one.

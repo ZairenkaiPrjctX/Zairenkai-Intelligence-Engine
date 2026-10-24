@@ -31,6 +31,12 @@
 - A 0.5B model routed 9 of 16 synthetic prompts correctly; not accurate enough alone. Verified.
   Evidence: `docs/SPIKE_REPORT.md`.
 - No Core client: system actions stop at the preview. Verified. Evidence: `Agent.approve`, tests.
+- Model distribution (2026-10-24): the app downloads the model, on the user's request, from this
+  repository's release `model-<model_id>` and checks it against its manifest. The release is
+  drafted by `.github/workflows/model-release.yml` from the manifest's pinned Hugging Face
+  revision and published by the maintainer (`docs/MODEL_RELEASE.md`). Verified locally. Evidence:
+  `tests/test_model_release.py`; `tools/model_release.py stage` on the real file, 2026-10-24.
+  **Unverified**: the workflow has never run and no model release exists.
 
 ## Authoritative sources
 
