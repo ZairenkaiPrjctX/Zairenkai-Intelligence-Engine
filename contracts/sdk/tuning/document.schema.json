@@ -1,0 +1,428 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://zairenkaiprjctx.github.io/schemas/sdk/tuning/document.schema.json",
+  "title": "zairenkai.tuning document",
+  "description": "Every document ztune prints (Zairenkai-Tuning crates/ztune-core/src/contract.rs, schema 1, GPL-3.0-only producer; this schema describes its output and contains none of its code). Request status and operation status are separate; a failed reading carries a status and a null value, never a substitute number.",
+  "type": "object",
+  "required": [
+    "schema",
+    "schema_version",
+    "kind",
+    "component"
+  ],
+  "properties": {
+    "schema": {
+      "const": "zairenkai.tuning"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "kind": {
+      "enum": [
+        "capabilities",
+        "device",
+        "error",
+        "gpu_table",
+        "operation",
+        "restore",
+        "telemetry"
+      ]
+    },
+    "component": {
+      "type": "object",
+      "required": [
+        "name",
+        "version"
+      ],
+      "properties": {
+        "name": {
+          "const": "zairenkai-tuning"
+        },
+        "version": {
+          "type": "string"
+        }
+      }
+    },
+    "error": {
+      "$ref": "#/$defs/error"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "capabilities"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "capabilities"
+        ],
+        "properties": {
+          "capabilities": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/capability"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "operation"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "request",
+          "operation"
+        ],
+        "properties": {
+          "request": {
+            "$ref": "#/$defs/request"
+          },
+          "operation": {
+            "$ref": "#/$defs/operation"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "error"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "error"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "telemetry"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "cpu",
+          "thermal",
+          "memory",
+          "gpu",
+          "storage"
+        ],
+        "properties": {
+          "cpu": {
+            "type": "object",
+            "required": [
+              "present",
+              "load",
+              "cores"
+            ],
+            "properties": {
+              "present": {
+                "$ref": "#/$defs/reading"
+              },
+              "load": {
+                "$ref": "#/$defs/reading"
+              },
+              "cores": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "integer",
+                      "minimum": 0
+                    },
+                    "cur_freq": {
+                      "$ref": "#/$defs/reading"
+                    },
+                    "min_freq": {
+                      "$ref": "#/$defs/reading"
+                    },
+                    "max_freq": {
+                      "$ref": "#/$defs/reading"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "reading": {
+      "type": "object",
+      "required": [
+        "status",
+        "unit"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "unsupported",
+            "permission_denied",
+            "unavailable",
+            "parse_error",
+            "not_sampled"
+          ]
+        },
+        "value": {},
+        "unit": {
+          "enum": [
+            "kHz",
+            "Hz",
+            "percent",
+            "celsius",
+            "bytes",
+            "text",
+            "count"
+          ]
+        },
+        "source": {
+          "type": "string"
+        },
+        "detail": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "properties": {
+          "status": {
+            "not": {
+              "const": "ok"
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "value": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    "error": {
+      "type": "object",
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "enum": [
+            "usage",
+            "invalid_value",
+            "unsupported",
+            "refused",
+            "device_mismatch",
+            "confirmation_required",
+            "permission_denied",
+            "busy",
+            "io",
+            "verification_failed",
+            "not_implemented",
+            "not_authorized"
+          ]
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "required": [
+        "write_authorized",
+        "tier",
+        "granted_values",
+        "reason"
+      ],
+      "properties": {
+        "write_authorized": {
+          "type": "boolean"
+        },
+        "tier": {
+          "enum": [
+            "U",
+            "G",
+            "S",
+            "D",
+            "X"
+          ]
+        },
+        "profile_id": {
+          "type": "string"
+        },
+        "granted_values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "if": {
+        "properties": {
+          "write_authorized": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "tier": {
+            "const": "D"
+          },
+          "granted_values": {
+            "minItems": 1
+          }
+        },
+        "required": [
+          "profile_id"
+        ]
+      }
+    },
+    "capability": {
+      "type": "object",
+      "required": [
+        "id",
+        "state",
+        "evidence"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "state": {
+          "enum": [
+            "available",
+            "not_verified",
+            "verified",
+            "unavailable",
+            "unsupported"
+          ]
+        },
+        "operation": {
+          "type": "string"
+        },
+        "allowed_values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "current": {},
+        "evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "authorization": {
+          "$ref": "#/$defs/authorization"
+        }
+      }
+    },
+    "request": {
+      "type": "object",
+      "required": [
+        "op",
+        "value",
+        "dry_run",
+        "status"
+      ],
+      "properties": {
+        "op": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "dry_run": {
+          "type": "boolean"
+        },
+        "status": {
+          "enum": [
+            "accepted",
+            "rejected"
+          ]
+        }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "required": [
+        "status",
+        "targets"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "not_started",
+            "no_change",
+            "applied_verified",
+            "rolled_back",
+            "failed"
+          ]
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "target",
+              "outcome"
+            ],
+            "properties": {
+              "target": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "before": {},
+              "requested": {},
+              "actual": {},
+              "outcome": {
+                "enum": [
+                  "unchanged",
+                  "written",
+                  "would_write",
+                  "restored",
+                  "restore_failed",
+                  "write_failed",
+                  "verification_failed",
+                  "not_attempted",
+                  "changed_externally"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

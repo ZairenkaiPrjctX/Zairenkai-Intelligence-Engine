@@ -29,7 +29,7 @@ def agent(*outputs):
 
 class Registry(unittest.TestCase):
     def test_the_registry_is_valid_and_closed(self):
-        self.assertEqual({"core.health", "core.capabilities", "thermal.snapshot", "fas.status", "fas.set_profile"},
+        self.assertEqual({"core.health", "core.capabilities", "thermal.snapshot", "fas.status", "fas.set_profile", "tuning.telemetry"},
                          {t["id"] for t in REG.tools})
         for t in REG.tools:
             self.assertFalse(t["parameters"].get("additionalProperties", True))
@@ -63,6 +63,16 @@ class Planning(unittest.TestCase):
         self.assertIsNone(t.preview)
         self.assertTrue(any("fixture replay" in e["detail"] for e in t.audit))
         self.assertEqual("degraded", t.results[1]["output"]["state"])
+
+    def test_tuning_telemetry_is_read_only_and_matches_the_sdk_contract(self):
+        t = agent(out([{"tool": "tuning.telemetry", "arguments": {}}])).handle("cek tuning")
+        self.assertIsNone(t.rejected_reason)
+        self.assertEqual(["completed"], [r["status"] for r in t.results])
+        payload = t.results[0]["output"]
+        self.assertEqual("telemetry", payload["kind"])
+        self.assertEqual("zairenkai-tuning", payload["component"]["name"])
+        self.assertEqual([], contracts.errors("sdk/tuning/document.schema.json", payload))
+        self.assertIsNone(t.preview)
 
     def test_a_system_tool_only_produces_a_preview(self):
         a = agent(out([{"tool": "fas.set_profile", "arguments": {"profile": "balanced"}}], goal="atur profil seimbang"))

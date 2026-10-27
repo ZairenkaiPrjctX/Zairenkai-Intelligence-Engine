@@ -105,6 +105,16 @@
       "sdk_path": "fixtures/captured/app/zthermal/snapshot-host.json",
       "copy": "fixtures/replay/zthermal-snapshot-host.json",
       "sha256": "8eb34367568917b390b08d9dc460842c471874c0f0babe284a32246fa6971a39"
+    },
+    {
+      "sdk_path": "contracts/tuning/document.schema.json",
+      "copy": "contracts/sdk/tuning/document.schema.json",
+      "sha256": "0ba27eec52b12757a84c77ccd1bab5a60b4e7503690e7960894caa667bec99fd"
+    },
+    {
+      "sdk_path": "fixtures/captured/tuning/telemetry.json",
+      "copy": "fixtures/replay/tuning-telemetry.json",
+      "sha256": "25f1008bd91218f340aa456a30d9ba751c22333e6d1e6a5fa2e9aca7d08b8142"
     }
   ]
 }

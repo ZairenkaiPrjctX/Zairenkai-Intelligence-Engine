@@ -36,6 +36,7 @@ class FixtureReplayExecutor:
         "core.capabilities": ("core-capabilities.json", "result"),
         "fas.status": ("fas-status.json", None),
         "thermal.snapshot": ("zthermal-snapshot-host.json", None),
+        "tuning.telemetry": ("tuning-telemetry.json", None),
     }
 
     def run(self, tool_id: str, arguments: dict[str, Any]) -> Any:

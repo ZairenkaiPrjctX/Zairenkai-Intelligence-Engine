@@ -60,6 +60,21 @@
     "output": "https://zairenkaiprjctx.github.io/schemas/sdk/fas/status.schema.json"
   },
   {
+    "id": "tuning.telemetry",
+    "description": "Read-only CPU, GPU, memory, thermal and storage telemetry reported by Zairenkai-Tuning through Core. Reports unavailable or permission-restricted readings as such; never changes tuning.",
+    "risk": "read_only",
+    "access": "read",
+    "permission": "root_via_core",
+    "reversible": true,
+    "timeout_ms": 8000,
+    "confirmation": "none",
+    "parameters": {
+      "type": "object",
+      "additionalProperties": false
+    },
+    "output": "https://zairenkaiprjctx.github.io/schemas/sdk/tuning/document.schema.json"
+  },
+  {
     "id": "fas.set_profile",
     "description": "Ask Core to switch the FAS profile (power_saver, balanced, performance, fast_response, adaptive).",
     "risk": "system",
