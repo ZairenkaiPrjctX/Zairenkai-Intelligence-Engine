@@ -59,6 +59,8 @@ class LlamaCppRuntime:
                                timeout=self.timeout_s, env={"LC_ALL": "C"}, check=False)
         except subprocess.TimeoutExpired as e:
             raise RuntimeUnavailable(f"generation timed out after {self.timeout_s:.0f} s") from e
+        except OSError as e:
+            raise RuntimeUnavailable(f"cannot start llama.cpp: {e.strerror or type(e).__name__}") from e
         if r.returncode != 0:
             tail = r.stderr.decode(errors="replace").strip().splitlines()[-1:] or ["no output"]
             raise RuntimeUnavailable(f"llama.cpp exited {r.returncode}: {tail[0][:200]}")
@@ -101,6 +103,8 @@ class ZieRunRuntime:
                 r = subprocess.run(argv, capture_output=True, timeout=self.timeout_s, env={"LC_ALL": "C"}, check=False)
             except subprocess.TimeoutExpired as e:
                 raise RuntimeUnavailable(f"generation timed out after {self.timeout_s:.0f} s") from e
+            except OSError as e:
+                raise RuntimeUnavailable(f"cannot start zie-run: {e.strerror or type(e).__name__}") from e
         if r.returncode != 0:
             tail = r.stderr.decode(errors="replace").strip().splitlines()[-1:] or ["no output"]
             raise RuntimeUnavailable(f"zie-run exited {r.returncode}: {tail[0][:200]}")

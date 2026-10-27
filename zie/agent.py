@@ -77,6 +77,10 @@ class Agent:
             raw = self.runtime.generate(build_prompt(self.registry, utterance), schema, MAX_TOKENS)
         except RuntimeUnavailable as e:
             return self._reject(audit, plan_id, f"local model unavailable: {e}")
+        except Exception as e:
+            # Runtime adapters are a trust boundary: report an unavailable local model, never
+            # let backend errors escape into the client or try a remote fallback.
+            return self._reject(audit, plan_id, f"Model lokal gagal merespons ({type(e).__name__}). Coba lagi.")
         try:
             out = json.loads(raw)
         except json.JSONDecodeError:
@@ -146,6 +150,8 @@ class Agent:
             output = self.executor.run(tool["id"], inv["arguments"])
         except ToolUnavailable as e:
             r = _result(inv, "unsupported", "tool_unavailable", str(e))
+        except Exception as e:
+            r = _result(inv, "failed", "tool_error", f"Local tool failed ({type(e).__name__}). Retry the request.")
         else:
             errs = contracts.errors(tool["output"], _wrap(tool, output))
             r = _result(inv, "failed", "output_contract", errs[0]) if errs else {**_result(inv, "completed"), "output": output}
