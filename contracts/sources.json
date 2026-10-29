@@ -3,7 +3,7 @@
   "note": "Byte copies from Zairenkai-Sdk at the pinned commit (SDK ADR 0001: the SDK is canonical for the Local-AI contracts). tools/check_sdk_copies.py compares them; never edit by hand. fixtures/replay/ are captured outputs of the real binaries that the spike's fixture executor replays: they are not live device data.",
   "sdk": {
     "repository": "ZairenkaiPrjctX/Zairenkai-Sdk",
-    "commit": "41481ec83c84afbdb5fe6986e77842b1c368c493"
+    "commit": "c3be17507fdf0fd1080747317b7648478b97a8de"
   },
   "files": [
     {
